@@ -1,4 +1,5 @@
-var favicons = require('favicons')
+var resolve  = require('resolve')
+var favicons = require(resolve.sync('favicons', {basedir: '/usr/local/lib/node_modules'}))
 
 // Image Optimization
 // ///////////////////////////////////////////////////////////////////////////////

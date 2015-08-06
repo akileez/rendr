@@ -1,6 +1,7 @@
-var uncss = require('uncss')
-var fs = require('fs')
-var assert = require('assert')
+var resolve  = require('resolve')
+var uncss    = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
+var fs       = require('fs')
+var assert   = require('assert')
 var CleanCSS = require('clean-css')
 
 // Uncss

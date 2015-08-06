@@ -11,9 +11,10 @@
 
 var fs                 = require('fs')
 var path               = require('path')
-var Less               = require('less')
-var lessPlugAutoPrefix = require('less-plugin-autoprefix')
-var lessPlugCssComb    = require('less-plugin-csscomb')
+var resolve            = require('resolve')
+var Less               = require(resolve.sync('less', {basedir: '/usr/local/lib/node_modules'}))
+var lessPlugAutoPrefix = require(resolve.sync('less-plugin-autoprefix', {basedir: '/usr/local/lib/node_modules'}))
+var lessPlugCssComb    = require(resolve.sync('less-plugin-csscomb', {basedir: '/usr/local/lib/node_modules'}))
 var assert             = require('assert')
 var isBoolean          = require('toolz/src/lang/isBoolean')
 var iterate            = require('toolz/src/async/iterate')

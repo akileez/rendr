@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "An awesome module being created",
   "main": "index.js",
   "scripts": {},
@@ -28,19 +28,14 @@
     "clean-css": "^3.3.8",
     "colorz": "^0.1.4",
     "cson": "^3.0.1",
-    "favicons": "^3.1.3",
     "glob": "^5.0.14",
     "js-beautify": "^1.5.10",
     "json-colorz": "^0.1.3",
-    "less": "^2.5.1",
-    "less-plugin-autoprefix": "^1.4.2",
-    "less-plugin-csscomb": "0.0.2",
     "mkdirp": "^0.5.1",
     "resolve": "^1.1.6",
     "rimraf": "^2.4.2",
     "toolz": "akileez/toolz",
-    "uglify-js": "^2.4.24",
-    "uncss": "^0.12.1"
+    "uglify-js": "^2.4.24"
   },
   "devDependencies": {},
   "files": [

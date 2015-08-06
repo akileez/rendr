@@ -1,0 +1,46 @@
+{
+  "name": "rendr",
+  "version": "0.1.0",
+  "description": "An awesome module being created",
+  "main": "index.js",
+  "scripts": {},
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/akileez/rendr.git"
+  },
+  "author": {
+    "name": "Keith Williams",
+    "email": "git@keeda.net",
+    "url": "https://github.com/akileez/rendr"
+  },
+  "homepage": "https://github.com/akileez/rendr",
+  "bugs": {
+    "url": "https://github.com/akileez/rendr/issues"
+  },
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "argh": "^0.1.4",
+    "chokidar": "^1.0.5",
+    "clean-css": "^3.3.8",
+    "cson": "^3.0.1",
+    "favicons": "^3.1.3",
+    "glob": "^5.0.14",
+    "json-colorz": "^0.1.3",
+    "less": "^2.5.1",
+    "less-plugin-autoprefix": "^1.4.2",
+    "less-plugin-csscomb": "0.0.2",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.4.2",
+    "uncss": "^0.12.1"
+  },
+  "devDependencies": {},
+  "files": [
+    "LICENSE",
+    "index.js",
+    "README.md"
+  ]
+}

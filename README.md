@@ -2,6 +2,10 @@
 [![experimental][stability-image]][stability-url]
 [![ISC license][license-img]][license-url]
 
+WIP.  
+see [sample output](https://github.com/akileez/rendr/wiki/sample-output) of earlier working version.  
+Details to follow soon.
+
 ## Installation
 ```bash
 $ npm install akileez\rendr

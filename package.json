@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "An awesome module being created",
   "main": "index.js",
   "scripts": {},
@@ -36,6 +36,7 @@
     "less-plugin-autoprefix": "^1.4.2",
     "less-plugin-csscomb": "0.0.2",
     "mkdirp": "^0.5.1",
+    "resolve": "^1.1.6",
     "rimraf": "^2.4.2",
     "toolz": "akileez/toolz",
     "uglify-js": "^2.4.24",

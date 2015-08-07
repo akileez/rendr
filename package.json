@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "An awesome module being created",
   "main": "index.js",
   "scripts": {},
@@ -24,10 +24,8 @@
   "keywords": [],
   "dependencies": {
     "argh": "^0.1.4",
-    "chokidar": "^1.0.5",
     "clean-css": "^3.3.8",
     "colorz": "^0.1.4",
-    "cson": "^3.0.1",
     "glob": "^5.0.14",
     "js-beautify": "^1.5.10",
     "json-colorz": "^0.1.3",

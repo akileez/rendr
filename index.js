@@ -16,7 +16,7 @@
 
 var argv             = require('argh').argv
 var resolve          = require('resolve')
-var handlebars       = require(resolve.sync('handlebars', {basedir: __dirname, moduleDirectory: '../'}))
+var handlebars       = require('handlebars')
 var globby           = require('./app/src/globby')
 var registrar        = require('./app/src/registrarHandlebars')
 var rendr            = require('./app/rendr').rendr
@@ -945,5 +945,6 @@ function Rendr (initialConfig) {
 }
 
 module.exports = Rendr
+module.exports.handlebars = handlebars
 module.exports.matter = require('./app/src/matter')
 

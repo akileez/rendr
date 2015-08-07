@@ -604,7 +604,7 @@ function Rendr (initialConfig) {
   function watch (cb) {
     if (argv.w) {
       argv.r = true
-      var chokidar = require('chokidar')
+      var chokidar = require(resolve.sync('chokidar', {basedir: '/usr/local/lib/node_modules'}))
       var watchOpts = {
         ignored: /[\/\\]\./,
         ignoreInitial: true,

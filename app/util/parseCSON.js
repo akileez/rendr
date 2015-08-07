@@ -1,7 +1,8 @@
-var cson = require('cson')
-var path = require('path')
+var resolve = require('resolve')
+var cson    = require(resolve.sync('cson', {basedir: '/usr/local/lib/node_modules'}))
+var path    = require('path')
 var isEmpty = require('toolz/src/lang/isEmpty')
-var extend = require('toolz/src/object/extend')
+var extend  = require('toolz/src/object/extend')
 
 // configuration data for attaching to options and configuration (global)
 function parseCSON (filez, parser, cb) {

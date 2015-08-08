@@ -487,7 +487,7 @@ function Rendr (initialConfig) {
     var items = {
       // glob of filenames and namespace for ftree
       templates : 'tmpls', // just for testing. remove later
-      modules   : 'page',
+      modules   : '_',
       css       : 'css',
       js        : 'js',
       code      : 'code',

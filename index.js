@@ -945,6 +945,7 @@ function Rendr (initialConfig) {
 }
 
 module.exports = Rendr
+module.exports.glob = globby
 module.exports.handlebars = handlebars
 module.exports.matter = require('./app/src/matter')
 

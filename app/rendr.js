@@ -20,7 +20,7 @@ var layouts       = require('./src/layouts')
 var handlebars    = require('handlebars')
 var prettify      = require('js-beautify').html
 var mkdirp        = require('mkdirp')
-var fs            = require('fs')
+var writeFile     = require('fs').writeFile
 var path          = require('path')
 var assert        = require('assert')
 var logger        = require('./util/logger')
@@ -68,7 +68,7 @@ function rendr (files, stack, globals, defaults, cb) {
     return mkdirp(meta.dest.bpath, function (err) {
       // callback for mkdirp
       assert.ifError(err)
-      fs.writeFile(meta.dest.fpath, rendrFilez(template(context), defaults), function (err) {
+      writeFile(meta.dest.fpath, rendrFilez(template(context), defaults), function (err) {
         // callback for fs.writeFile
         assert.ifError(err)
         logger.file(meta.dest.fpath, 'rendered')

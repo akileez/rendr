@@ -9,7 +9,7 @@
 // Rendr JS Requirements
 // ///////////////////////////////////////////////////////////////////////////////
 
-var fs         = require('fs');
+var writeFile  = require('fs').writeFile
 var concat     = require('toolz/src/file/concat')
 var assert     = require('assert')
 var isEmpty    = require('toolz/src/lang/isEmpty')
@@ -106,7 +106,7 @@ function concatenate (src, dest, flag, cb) {
   if (isBoolean(flag) && flag === true) {
     var ugly = require('uglify-js')
 
-    return fs.writeFile(dest, ugly.minify(concat.sync(src), {
+    return writeFile(dest, ugly.minify(concat.sync(src), {
       fromString: true,
       output: {
         comments: false

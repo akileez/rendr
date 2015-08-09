@@ -1,6 +1,6 @@
-var fs         = require('fs')
-var path       = require('path')
-var logger     = require('../util/logger')
+var writeFileSync = require('fs').writeFileSync
+var path          = require('path')
+var logger        = require('../util/logger')
 
 function hashRev (files, manifest) {
   files = Array.isArray(files) ? files : [files]
@@ -34,7 +34,7 @@ function hashRev (files, manifest) {
     if (original !== revision) {
       logger.readyEvent('Hash', 'revised', file, '✔')
       // logger.event('Hash', '✔ ' + file, 'changed')
-      return fs.writeFileSync(file, revision)
+      return writeFileSync(file, revision)
     }
   })
 }

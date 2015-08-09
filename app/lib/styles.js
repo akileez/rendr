@@ -9,7 +9,8 @@
 // Rendr Requirements
 // ///////////////////////////////////////////////////////////////////////////////
 
-var fs                 = require('fs')
+var writeFile          = require('fs').writeFile
+var readFileSync       = require('fs').readFileSync
 var path               = require('path')
 var resolve            = require('resolve')
 var Less               = require(resolve.sync('less', {basedir: '/usr/local/lib/node_modules'}))
@@ -123,7 +124,7 @@ function engineLess (files, ext, lineBreaks, cssCombDefaults, cb) {
 
   files.forEach(function (f) {
     var fn = path.basename(f, path.extname(f)) // fn = filename
-    var fc = fs.readFileSync(f, 'utf8')        // fc = file content
+    var fc = readFileSync(f, 'utf8')        // fc = file content
     Less.render(fc, {
       plugins: PLUGINS
     }, function (err, res) {
@@ -150,7 +151,7 @@ function engineLess (files, ext, lineBreaks, cssCombDefaults, cb) {
 
 // write to said destination
 function saveFile (io, fn, xx, cb) { // io = input/output fn = filename xx = extension
-  return fs.writeFile('assets/css/' + fn + xx, io, function (err) {
+  return writeFile('assets/css/' + fn + xx, io, function (err) {
     assert.ifError(err)
     logger.msg('assets/css/' + fn + xx, 'generated')
     cb()

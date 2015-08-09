@@ -1,8 +1,8 @@
-var resolve  = require('resolve')
-var uncss    = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
-var fs       = require('fs')
-var assert   = require('assert')
-var CleanCSS = require('clean-css')
+var resolve   = require('resolve')
+var uncss     = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
+var writeFile = require('fs').writeFile
+var assert    = require('assert')
+var CleanCSS  = require('clean-css')
 
 // Uncss
 // ///////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@ function reduceCSS (files, dest, options, lineBreaks, cb) {
     }).minify(res).styles
 
     // can use saveFile here instead.
-    fs.writeFile(dest, minified, function (err) {
+    writeFile(dest, minified, function (err) {
       assert.ifError(err)
       return cb()
     })

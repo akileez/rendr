@@ -51,16 +51,6 @@ function stylez (fp, globals, defaults, cb) {
 
     var files = pick(defaults.LESSfilez, keys)
 
-    // iterate.each(files, function (val, key, done) {
-    //   engineLess(val, ext, lineBreaks, defaults.csscomb, function () {
-    //     done(null, key)
-    //   })
-    // }, function (err, res) {
-    //   assert.ifError(err)
-    //   rsync('static', 'css', defaults, function () {
-    //     cb(null, 'stylez')
-    //   })
-    // })
   } else {
     // For the production environment. Only difference is
     // the extension we use. module handles everything
@@ -74,13 +64,6 @@ function stylez (fp, globals, defaults, cb) {
     }
 
     var files = values(pick(defaults.LESSfilez, 'styles'))
-
-
-    // engineLess(files, ext, lineBreaks, defaults.csscomb, function () {
-    //   rsync('static', 'css', defaults, function () {
-    //     cb(null, 'stylez')
-    //   })
-    // })
   }
 
   concurrent.each(files, function (val, key, done) {

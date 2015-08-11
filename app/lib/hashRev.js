@@ -1,4 +1,5 @@
 var writeFileSync = require('fs').writeFileSync
+var readFileSync  = require('fs').readFileSync
 var path          = require('path')
 var logger        = require('../util/logger')
 
@@ -10,7 +11,7 @@ function hashRev (files, manifest) {
     var matches
     var original
 
-    revision = fs.readFileSync(file, 'utf8')
+    revision = readFileSync(file, 'utf8')
     original = revision
 
     matches = revision.match(/url\(\s*['"]?([^'"\)]+)['"]?\s*\)/g)

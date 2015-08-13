@@ -16,9 +16,9 @@ function sortPatterns (patterns) {
   var negatives = []
 
   patterns.forEach(function (pattern, index) {
-    var isNegative = pattern[0] === '!';
+    var isNegative = pattern[0] === '!'
 
-    (isNegative ? negatives : positives).push({
+    ;(isNegative ? negatives : positives).push({
       index: index,
       pattern: isNegative ? pattern.slice(1) : pattern
     })

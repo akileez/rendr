@@ -11,7 +11,7 @@
 
 var exec     = require('child_process').exec
 var assert   = require('assert')
-var mkdirp   = require('mkdirp')
+var mkdirp   = require('toolz/src/file/mkdirp')
 var rimraf   = require('rimraf')
 var logger   = require('../util/logger')
 

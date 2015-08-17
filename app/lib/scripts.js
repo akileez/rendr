@@ -9,7 +9,7 @@
 // Rendr JS Requirements
 // ///////////////////////////////////////////////////////////////////////////////
 
-var writeFile  = require('fs').writeFile
+var writeFile  = require('toolz/src/file/writeFile')
 var concat     = require('toolz/src/file/concat')
 var assert     = require('assert')
 var isEmpty    = require('toolz/src/lang/isEmpty')

@@ -1,6 +1,6 @@
 var resolve   = require('resolve')
 var uncss     = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
-var writeFile = require('fs').writeFile
+var writeFile = require('toolz/src/file/writeFile')
 var assert    = require('assert')
 var CleanCSS  = require('clean-css')
 

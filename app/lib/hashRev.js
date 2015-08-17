@@ -1,5 +1,5 @@
-var writeFileSync = require('fs').writeFileSync
-var readFileSync  = require('fs').readFileSync
+var writeFile     = require('toolz/src/file/writeFile')
+var readFile      = require('toolz/src/file/readFile')
 var path          = require('path')
 var logger        = require('../util/logger')
 
@@ -11,7 +11,7 @@ function hashRev (files, manifest) {
     var matches
     var original
 
-    revision = readFileSync(file, 'utf8')
+    revision = readFile(file, 'utf8')
     original = revision
 
     matches = revision.match(/url\(\s*['"]?([^'"\)]+)['"]?\s*\)/g)
@@ -35,7 +35,7 @@ function hashRev (files, manifest) {
     if (original !== revision) {
       logger.readyEvent('Hash', 'revised', file, '✔')
       // logger.event('Hash', '✔ ' + file, 'changed')
-      return writeFileSync(file, revision)
+      return writeFile(file, revision)
     }
   })
 }

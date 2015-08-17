@@ -9,8 +9,8 @@
 // Rendr Requirements
 // ///////////////////////////////////////////////////////////////////////////////
 
-var writeFile          = require('fs').writeFile
-var readFileSync       = require('fs').readFileSync
+var writeFile          = require('toolz/src/file/writeFile')
+var readFile           = require('toolz/src/file/readFile')
 var path               = require('path')
 var resolve            = require('resolve')
 var Less               = require(resolve.sync('less', {basedir: '/usr/local/lib/node_modules'}))
@@ -107,7 +107,7 @@ function engineLess (files, ext, lineBreaks, cssCombDefaults, cb) {
 
   files.forEach(function (f) {
     var fn = path.basename(f, path.extname(f)) // fn = filename
-    var fc = readFileSync(f, 'utf8')        // fc = file content
+    var fc = readFile(f, 'utf8')        // fc = file content
     Less.render(fc, {
       plugins: PLUGINS
     }, function (err, res) {

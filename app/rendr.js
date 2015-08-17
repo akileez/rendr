@@ -14,13 +14,12 @@ var dateFormat    = require('toolz/src/date/dateFormat')
 var isNullOrUndef = require('toolz/src/lang/isNullOrUndef')
 var iterate       = require('toolz/src/async/iterate')
 var concurrent    = require('toolz/src/async/concurrent')
+var writeFile     = require('toolz/src/file/writeFile')
 var Map           = require('toolz/src/cache/map')
 var matter        = require('./src/matter')
 var layouts       = require('./src/layouts')
 var handlebars    = require('handlebars')
 var prettify      = require('js-beautify').html
-var mkdirp        = require('mkdirp')
-var writeFile     = require('fs').writeFile
 var path          = require('path')
 var assert        = require('assert')
 var logger        = require('./util/logger')
@@ -65,15 +64,10 @@ function rendr (files, stack, globals, defaults, cb) {
     })
 
     // mkdir if non-existant, write file to dest and prettify rendered template
-    return mkdirp(meta.dest.bpath, function (err) {
-      // callback for mkdirp
+    return writeFile(meta.dest.fpath, rendrFilez(template(context), defaults), function (err) {
       assert.ifError(err)
-      writeFile(meta.dest.fpath, rendrFilez(template(context), defaults), function (err) {
-        // callback for fs.writeFile
-        assert.ifError(err)
-        logger.file(meta.dest.fpath, 'rendered')
-        done(null, key)
-      })
+      logger.file(meta.dest.fpath, 'rendered')
+      done(null, key)
     })
   }, function (err, result) {
     // callback for iterate.each

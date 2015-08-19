@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "An awesome module being created",
   "main": "index.js",
   "scripts": {},
@@ -31,7 +31,6 @@
     "js-beautify": "^1.5.10",
     "json-colorz": "^0.1.3",
     "resolve": "^1.1.6",
-    "rimraf": "^2.4.2",
     "toolz": "akileez/toolz",
     "uglify-js": "^2.4.24"
   },

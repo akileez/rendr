@@ -11,7 +11,7 @@ function matter (str, opts) {
 
   // default results to build
   var res = {
-    orig: str,
+    // orig: str,
     data: {},
     content: str
   }

@@ -43,6 +43,7 @@ var config           = new Config()
 var opts             = new Config()
 var stack            = new Config()
 var map              = new Config()
+var page             = new Config()
 
 var registrarhbs     = wrap(registrar)
 
@@ -141,6 +142,7 @@ function Rendr (initialConfig) {
       loadTemplates,
       loadMatter,
       buildFileTree,
+      pageMap,
       layoutStack,
       rendrTemplates,
       minifyCSS,
@@ -487,7 +489,7 @@ function Rendr (initialConfig) {
     var items = {
       // glob of filenames and namespace for ftree
       templates : 'tmpls', // just for testing. remove later
-      modules   : '_',
+      // modules   : '_',
       css       : 'css',
       js        : 'js',
       code      : 'code',
@@ -504,6 +506,19 @@ function Rendr (initialConfig) {
     }, function (err, res) {
       assert.ifError(err)
       cb(null, 'ftree')
+    })
+  }
+
+  // Map modules/pages to cache. Helpers read from cache as opposed to
+  // reading from disk during render time.
+  function pageMap (cb) {
+    iterate.each(globby.sync(opts.get('modules')), function (val, key, done) {
+      page.set(readFile(val, true))
+      done(null, key)
+    }, function (err, res) {
+      assert.ifError(err)
+      config.set('_', page.get())
+      cb(null, 'pageMap')
     })
   }
 
@@ -622,11 +637,9 @@ function Rendr (initialConfig) {
         })
       }
 
-      var modTree = function (cb) {
-        ftree(globby.sync(opts.get('modules')), 'filez', function (err, res) {
-          config.set(res)
-          cb(null, 'modTree')
-        })
+      var mapSinglePage = function (path, cb) {
+        page.set(readFile(path, true))
+        cb(null, 'mapped')
       }
 
       var watch = {
@@ -770,29 +783,45 @@ function Rendr (initialConfig) {
         // Watch Modules.
         // /////////////////////////////////////////////////////////////////////////////////
         modules: chokidar.watch(opts.get('modules'), watchOpts)
-          .on('change', function(path) {
-            logger.changed(path)
+          .on('all', function(event, path) {
 
-            var opsMods = [rendrTemplates]
-            iterate.series(opsMods, function(err, res) {
-              assert.ifError(err)
-            })
-          })
-          .on('add', function(fp) {
-            logger.event('File', fp, 'has been added.')
+            function pageMapper (cb) {
+              mapSinglePage(path, function () {
+                cb(null, 'rndr')
+              })
+            }
 
-            var opsMods = [modTree]
-            iterate.series(opsMods, function (err, res) {
-              assert.ifError(err)
-            })
-          })
-          .on('unlink', function(fp) {
-            logger.event('File', fp, 'has been removed.')
+            if (event == 'change') {
+              logger.changed(path)
 
-            var opsMods = [modTree, rendrTemplates]
-            iterate.series(opsMods, function (err, res) {
-              assert.ifError(err)
-            })
+              var opsMods = [pageMapper, rendrTemplates]
+              iterate.series(opsMods, function(err, res) {
+                assert.ifError(err)
+              })
+            }
+
+            if (event == 'add') {
+              logger.event('File', path, 'has been added')
+
+              var opsMods = [pageMapper]
+              iterate.series(opsMods, function (err, res) {
+                assert.ifError(err)
+              })
+            }
+
+            if (event == 'unlink') {
+              logger.event('File', path, 'has been removed')
+
+              // normalize key, remove it from page cache, reset global cache
+              var fp = path.split(/[\/]/g).slice(-1).toString().replace(/.hbs$/, '')
+              page.del(fp)
+              config.set('_', page.get())
+
+              var opsMods = [rendrTemplates]
+              iterate.series(opsMods, function (err, res) {
+                assert.ifError(err)
+              })
+            }
           })
           .on('ready', function() {
             logger.ready('Watching:', 'modules')

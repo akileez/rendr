@@ -15,6 +15,7 @@ var isNullOrUndef = require('toolz/src/lang/isNullOrUndef')
 var iterate       = require('toolz/src/async/iterate')
 var concurrent    = require('toolz/src/async/concurrent')
 var writeFile     = require('toolz/src/file/writeFile')
+var segments      = require('toolz/src/path/segments')
 var Map           = require('toolz/src/cache/map')
 var matter        = require('./src/matter')
 var layouts       = require('./src/layouts')
@@ -31,6 +32,7 @@ var cache         = new Map()
 
 function rendr (files, stack, globals, defaults, cb) {
   iterate.each(files, function (page, key, done) {
+    var tmpl = {}
     // read file, normalize output
     // console.log(f, ' processing')
     // var page = matter.read(f)
@@ -47,8 +49,12 @@ function rendr (files, stack, globals, defaults, cb) {
     if (isNullOrUndef(meta.layout) || !stack[meta.layout]) {
       meta.layout = defaults.defaultLayout
     }
+
+    // namespace metadata for primarily for navigation but
+    // other uses as well.
+    tmpl.tmpl = meta
     // merge context
-    var context = extend({}, globals, stack[meta.layout].locals, meta)
+    var context = extend({}, globals, stack[meta.layout].locals, meta, tmpl)
 
     // apply layouts to content
     text = layouts(text, meta.layout, stack, {
@@ -212,8 +218,6 @@ function frontMatter (filenames, defaults, cb) {
     metadata.buildExt     = path.extname(f).replace(/hbs$/, defaults.engine)
     metadata.buildDest    = defaults.destination + metadata.buildDirFileExt
     metadata.buildPath    = defaults.destination + metadata.buildDir
-    metadata.buildSlug    = metadata.slug
-    metadata.buildTitle   = metadata.navTitle
     metadata.autolink     = autolink + metadata.buildDirFileExt
 
     metadata.END = '----------------------------------------------'
@@ -229,14 +233,16 @@ function frontMatter (filenames, defaults, cb) {
 // readFile
 // ///////////////////////////////////////////////////////////////////////////////
 
-function readFile (fn) { // fn = filename;
+function readFile (fn, opt) { // fn = filename;
   var page = {}
-  var fileSeparator = '-'
-  var basename = path.dirname(fn)
-    .split(path.sep)
-    .slice(-1)[0]
-    + fileSeparator
-    + path.basename(fn, path.extname(fn))
+  var basename
+
+  if (opt) {
+    basename = segments.last(fn).replace(/\.hbs$/, '')
+  } else {
+    basename = segments.last(fn, 2, '-').replace(/\.hbs$/, '')
+  }
+
   page[basename] = matter.read(fn)
   return page
 }

@@ -26,6 +26,8 @@ var assert        = require('assert')
 var logger        = require('./util/logger')
 
 var cache         = new Map()
+var frontin       = new Map()
+var stackin       = new Map()
 
 // Rendr Process
 // ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +169,7 @@ function buildLayoutStack (files, cb) {
 // frontMatter
 // ///////////////////////////////////////////////////////////////////////////////
 
-function frontMatter (filenames, defaults, cb) {
+function frontMatter (filenames, reset, defaults, cb) {
   // build an object of all templates' yaml-front-matter and append file path
   // metadata to each key. Used for navigation, collections, sitemaps, sorting
   // and many other things.
@@ -176,6 +178,12 @@ function frontMatter (filenames, defaults, cb) {
 
   iterate.each(filenames, function (f, key, done) {
     var baseName = segments.last(f, 2, '-').replace(/\.hbs$/, '')
+
+    if (frontin.has(baseName) && f !== reset) {
+      parsed[baseName] = frontin.get(baseName)
+      return done(null, key)
+    }
+
     var metadata = matter.read(f).data
 
     metadata.buildInfoSTRT = '-----------------------'
@@ -205,9 +213,12 @@ function frontMatter (filenames, defaults, cb) {
 
     metadata.buildInfoEND = '------------------------'
 
-    parsed[baseName] = metadata;
+    parsed[baseName] = metadata
+
+    // reset internal cache
+    frontin.set(parsed)
     done(null, key)
-  }, function (err, result) { // callback for eachAsync
+  }, function (err, result) {
     assert.ifError(err)
     cb(null, parsed)
   })

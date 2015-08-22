@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "An awesome module being created",
   "main": "index.js",
   "scripts": {},
@@ -24,15 +24,12 @@
   "keywords": [],
   "dependencies": {
     "argh": "^0.1.4",
-    "clean-css": "^3.3.8",
     "colorz": "^0.1.4",
     "glob": "^5.0.14",
     "handlebars": "^3.0.3",
-    "js-beautify": "^1.5.10",
     "json-colorz": "^0.1.3",
     "resolve": "^1.1.6",
-    "toolz": "akileez/toolz",
-    "uglify-js": "^2.4.24"
+    "toolz": "akileez/toolz"
   },
   "devDependencies": {},
   "files": [

@@ -145,20 +145,29 @@ function dest (file, meta, defaults) {
 // Stack Object
 // ///////////////////////////////////////////////////////////////////////////////
 
-function buildLayoutStack (files, cb) {
+function buildLayoutStack (files, reset, cb) {
   // build an array of layouts for use in wrapping templates
   var stack = {}
   iterate.each(files, function(f, key, done) {
-    var namespace = path.basename(f, path.extname(f))
+    var namespace = segments.last(f).replace(/\.hbs$/, '')
+
+    if (stackin.has(namespace) && f !== reset) {
+      stack[namespace] = stackin.get(namespace)
+      return done(null, key)
+    }
+
     var page = matter.read(f)
-    var meta = page.data || {}
-    var text = page.content || ''
+    var meta = page.data
+    var text = page.content
 
     stack[namespace] = {
       content: text,
       locals: meta,
       layout: meta.layout || ''
     }
+
+    // reset internal cache
+    stackin.set(stack)
     done(null, key)
   }, function (err, results) {
     assert.ifError(err)

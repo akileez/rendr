@@ -173,21 +173,14 @@ function frontMatter (filenames, defaults, cb) {
   // and many other things.
   var parsed = {}
   var pathSeparator = '/'
-  var autolink = '..'
 
   iterate.each(filenames, function (f, key, done) {
     var baseName = segments.last(f, 2, '-').replace(/\.hbs$/, '')
-    var page = matter.read(f)
-    var metadata = page.data
+    var metadata = matter.read(f).data
 
-    metadata.STRT = '---------------------------------------------'
+    metadata.buildInfoSTRT = '-----------------------'
 
     if (metadata.pubDate) metadata.iso8601Date = dateFormat(metadata.pubDate, 'iso')
-    else metadata.iso8601Date = dateFormat('iso')
-
-    metadata.parentPath = page.path
-
-    metadata.parentDir = path.dirname(f).split(path.sep).slice( 3 )[0]
 
     // set regex to remove path items which will not translate
     // to the build directory in the options
@@ -207,11 +200,10 @@ function frontMatter (filenames, defaults, cb) {
     metadata.buildFileExt = path.basename(f).replace(/hbs$/, defaults.engine)
     metadata.buildFile    = path.basename(f, path.extname(f))
     metadata.buildExt     = path.extname(f).replace(/hbs$/, defaults.engine)
-    metadata.buildDest    = defaults.destination + metadata.buildDirFileExt
     metadata.buildPath    = defaults.destination + metadata.buildDir
-    metadata.autolink     = autolink + metadata.buildDirFileExt
+    metadata.buildDest    = defaults.destination + metadata.buildDirFileExt
 
-    metadata.END = '----------------------------------------------'
+    metadata.buildInfoEND = '------------------------'
 
     parsed[baseName] = metadata;
     done(null, key)

@@ -524,8 +524,8 @@ function Rendr (initialConfig) {
 
   // Build the layout stack
   function layoutStack (cb) {
-    stack.del()
-    buildLayoutStack(globby.sync(opts.get('layouts')), function (err, res) {
+    // stack.del()
+    buildLayoutStack(globby.sync(opts.get('layouts')), false, function (err, res) {
       stack.set(res)
       cb(null, 'refresh')
     })
@@ -637,20 +637,6 @@ function Rendr (initialConfig) {
         })
       }
 
-      var matterSinglePage = function (path, cb) {
-        var fmap = {} //file map of YFM
-        frontMatter(globby.sync(opts.get('templates')), path, opts.get(), function (err, res) {
-          fmap.map = res
-          config.set(fmap)
-          cb(null, 'fmap')
-        })
-      }
-
-      var mapSinglePage = function (path, cb) {
-        page.set(readFile(path, true))
-        cb(null, 'mapped')
-      }
-
       var watch = {
         // Watch Templates Views.
         // /////////////////////////////////////////////////////////////////////////////////
@@ -669,7 +655,10 @@ function Rendr (initialConfig) {
             }
 
             function reloadMatter (cb) {
-              matterSinglePage(path, function () {
+              var fmap = {} //file map of YFM
+              frontMatter(globby.sync(opts.get('templates')), path, opts.get(), function (err, res) {
+                fmap.map = res
+                config.set(fmap)
                 cb(null, 'frontin')
               })
             }
@@ -723,13 +712,20 @@ function Rendr (initialConfig) {
               })
             }
 
+            function reStack (cb) {
+              buildLayoutStack(globby.sync(opts.get('layouts')), path, function (err, res) {
+                stack.set(res)
+                cb(null, 'reStack')
+              })
+            }
+
             if (getBaseDir(path, 'self') === 'layout-sitemap') {
-              var opsLayouts = [layoutStack, donemsg, rndrFilez, loadTemplates]
+              var opsLayouts = [reStack, donemsg, rndrFilez, loadTemplates]
               iterate.series(opsLayouts, function (err, res) {
                 assert.ifError(err)
               })
             } else {
-              var opsLayouts = [layoutStack, donemsg, rendrTemplates]
+              var opsLayouts = [reStack, donemsg, rendrTemplates]
               iterate.series(opsLayouts, function (err, res) {
                 assert.ifError(err)
               })
@@ -801,9 +797,8 @@ function Rendr (initialConfig) {
           .on('all', function(event, path) {
 
             function pageMapper (cb) {
-              mapSinglePage(path, function () {
-                cb(null, 'rndr')
-              })
+              page.set(readFile(path, true))
+              cb(null, 'mapped')
             }
 
             if (event == 'change') {

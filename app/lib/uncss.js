@@ -2,7 +2,7 @@ var resolve   = require('resolve')
 var uncss     = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
 var writeFile = require('toolz/src/file/writeFile')
 var assert    = require('assert')
-var CleanCSS  = require('clean-css')
+var CleanCSS  = require(resolve.sync('clean-css', {basedir: '/usr/local/lib/node_modules'}))
 
 // Uncss
 // ///////////////////////////////////////////////////////////////////////////////

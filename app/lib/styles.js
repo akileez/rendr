@@ -114,7 +114,7 @@ function engineLess (files, ext, lineBreaks, cssCombDefaults, cb) {
       assert.ifError(err)
 
       if (isBoolean(lineBreaks)) {
-        var CleanCSS = require('clean-css')
+        var CleanCSS = require(resolve.sync('clean-css', {basedir: '/usr/local/lib/node_modules'}))
         var minified = new CleanCSS({
           advanced: false,
           keepBreaks: lineBreaks

@@ -476,7 +476,7 @@ function Rendr (initialConfig) {
   // each template. This object is attached to Global Data.
   function loadMatter (cb) {
     var fmap = {} //file map of YFM
-    frontMatter(globby.sync(opts.get('templates')), opts.get(), function (err, res) {
+    frontMatter(globby.sync(opts.get('templates')), false, opts.get(), function (err, res) {
       fmap.map = res
       config.set(fmap)
       cb(null, 'fmap')
@@ -637,6 +637,15 @@ function Rendr (initialConfig) {
         })
       }
 
+      var matterSinglePage = function (path, cb) {
+        var fmap = {} //file map of YFM
+        frontMatter(globby.sync(opts.get('templates')), path, opts.get(), function (err, res) {
+          fmap.map = res
+          config.set(fmap)
+          cb(null, 'fmap')
+        })
+      }
+
       var mapSinglePage = function (path, cb) {
         page.set(readFile(path, true))
         cb(null, 'mapped')
@@ -659,7 +668,13 @@ function Rendr (initialConfig) {
               })
             }
 
-            var opsTemplates = [buildFileTree, loadMatter, rndrFilez, loadTemplates]
+            function reloadMatter (cb) {
+              matterSinglePage(path, function () {
+                cb(null, 'frontin')
+              })
+            }
+
+            var opsTemplates = [buildFileTree, reloadMatter, rndrFilez, loadTemplates]
             iterate.series(opsTemplates, function(err, res) {
               assert.ifError(err)
             })

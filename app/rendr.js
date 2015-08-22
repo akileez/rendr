@@ -172,29 +172,20 @@ function frontMatter (filenames, defaults, cb) {
   // metadata to each key. Used for navigation, collections, sitemaps, sorting
   // and many other things.
   var parsed = {}
-  var fileSeparator = '-'
   var pathSeparator = '/'
   var autolink = '..'
 
   iterate.each(filenames, function (f, key, done) {
-    var baseName = path.dirname(f)
-      .split(path.sep)
-      .slice(-1)[0]
-      + fileSeparator
-      + path.basename(f, path.extname(f))
-
-    var metadata = matter.read(f).data
+    var baseName = segments.last(f, 2, '-').replace(/\.hbs$/, '')
+    var page = matter.read(f)
+    var metadata = page.data
 
     metadata.STRT = '---------------------------------------------'
 
     if (metadata.pubDate) metadata.iso8601Date = dateFormat(metadata.pubDate, 'iso')
     else metadata.iso8601Date = dateFormat('iso')
 
-    metadata.parentPath = path.dirname(f)
-      + pathSeparator
-      + f.split(path.sep)
-      .slice( -1 )[0]
-      .replace(/hbs$/, defaults.engine)
+    metadata.parentPath = page.path
 
     metadata.parentDir = path.dirname(f).split(path.sep).slice( 3 )[0]
 

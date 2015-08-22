@@ -104,7 +104,8 @@ function scriptz (fp, globals, defaults, cb) {
 function concatenate (src, dest, flag, cb) {
   if (isEmpty(src)) return cb()
   if (isBoolean(flag) && flag === true) {
-    var ugly = require('uglify-js')
+    var resolve   = require('resolve')
+    var ugly = require(resolve.sync('uglify-js', {basedir: '/usr/local/lib/node_modules'}))
 
     return writeFile(dest, ugly.minify(concat.sync(src), {
       fromString: true,

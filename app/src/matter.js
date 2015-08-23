@@ -77,7 +77,17 @@ var YAML = matter.parsers.requires.yaml || (matter.parsers.requires.yaml = requi
 matter.read = function (fp, opts) {
   var str = fs.readFileSync(fp, 'utf8')
   var obj = matter(str, opts)
-  return extend(obj, {path: fp})
+  // return extend(obj, {path: fp})
+  return extend({
+    abs     : fs.realpathSync(fp),
+    rel     : fp,
+    path    : fp,
+    dir     : path.dirname(fp),
+    base    : path.basename(fp),
+    file    : path.basename(fp, path.extname(fp)),
+    ext     : path.extname(fp),
+    stats   : fs.lstatSync(fp)
+  }, obj)
 }
 
 matter.stringify = function (str, data, opts) {

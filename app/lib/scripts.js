@@ -46,7 +46,7 @@ function scriptz (fp, globals, defaults, cb) {
 
       var globFilez = values(pick(defaults.SCRPTfilez, keys))
 
-      if (keys == 'bootstrap') src = globFilez
+      if (keys == 'framework') src = globFilez
       else src = globby.sync(globFilez)
 
       dest = [defaults.paths.js, '/', keys, '.js'].join('')
@@ -60,7 +60,7 @@ function scriptz (fp, globals, defaults, cb) {
       var series = defaults.SCRPTfilez
 
       iterate.each(series, function (val, key, done) {
-        if (key === 'bootstrap') src = val
+        if (key === 'framework') src = val
         else src = globby.sync(val)
 
         dest = [defaults.paths.js, '/', key, '.js'].join('')
@@ -85,7 +85,7 @@ function scriptz (fp, globals, defaults, cb) {
     }
 
     src = union(
-      defaults.SCRPTfilez.bootstrap,
+      defaults.SCRPTfilez.framework,
       globby.sync(defaults.SCRPTfilez.plugins),
       globby.sync(defaults.SCRPTfilez.libs),
       globby.sync(defaults.SCRPTfilez.theme)

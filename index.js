@@ -27,6 +27,7 @@ var Config           = require('toolz/src/cache/config')
 var iterate          = require('toolz/src/async/iterate')
 var concurrent       = require('toolz/src/async/concurrent')
 var contains         = require('toolz/src/array/contains')
+var strContains      = require('toolz/src/string/contains')
 var keys             = require('toolz/src/object/keys')
 var values           = require('toolz/src/object/values')
 var union            = require('toolz/src/array/union')
@@ -628,9 +629,12 @@ function Rendr (initialConfig) {
       }
 
       var rndrSingleFile = function (path, cb) {
-        map.del()
-        path = readFile(path)
+        // get updated content from template.
+        var pathObj = readFile(path)
+        // reset cache with updated template
+        if (strContains(path, 'views')) map.set(pathObj)
 
+        // rendr only changed template
         rendr(path, stack.get(), config.get(), opts.get(), function () {
           logger.done('rendered', 'Template')
           cb(null, 'rndr')
@@ -663,7 +667,7 @@ function Rendr (initialConfig) {
               })
             }
 
-            var opsTemplates = [buildFileTree, reloadMatter, rndrFilez, loadTemplates]
+            var opsTemplates = [reloadMatter, rndrFilez]
             iterate.series(opsTemplates, function(err, res) {
               assert.ifError(err)
             })

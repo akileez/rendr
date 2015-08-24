@@ -109,7 +109,8 @@ function dest (file, meta, defaults) {
   // purpose to simulate vinly-fs dest info for appending to metadata
   // of each file. Used to determine relative file path for navigation
 
-  if (cache.has(file)) return cache.get(file)
+  var base = file.replace(/\.hbs$/, '')
+  if (cache.has(base)) return cache.get(base)
 
   var pathSeparator = '/'
   var buildDir      = defaults.destination
@@ -138,7 +139,7 @@ function dest (file, meta, defaults) {
     extname  : buildExt
   }
 
-  cache.set(file, results)
+  cache.set(base, results)
   // console.log(cache.get())
   return results
 }
@@ -153,7 +154,6 @@ function buildLayoutStack (files, reset, cb) {
     var namespace = segments.last(f).replace(/\.hbs$/, '')
 
     if (stackin.has(namespace) && f !== reset) {
-      stack[namespace] = stackin.get(namespace)
       return done(null, key)
     }
 
@@ -168,11 +168,11 @@ function buildLayoutStack (files, reset, cb) {
     }
 
     // reset internal cache
-    stackin.set(stack)
+    stackin.set(namespace, stack[namespace])
     done(null, key)
   }, function (err, results) {
     assert.ifError(err)
-    cb(null, stack)
+    cb(null, stackin.get())
   })
 }
 
@@ -190,7 +190,6 @@ function frontMatter (filenames, reset, defaults, cb) {
     var baseName = segments.last(f, 2, '-').replace(/\.hbs$/, '')
 
     if (frontin.has(baseName) && f !== reset) {
-      parsed[baseName] = frontin.get(baseName)
       return done(null, key)
     }
 
@@ -226,11 +225,12 @@ function frontMatter (filenames, reset, defaults, cb) {
     parsed[baseName] = metadata
 
     // reset internal cache
-    frontin.set(parsed)
+    frontin.set(baseName, parsed[baseName])
+
     done(null, key)
   }, function (err, result) {
     assert.ifError(err)
-    cb(null, parsed)
+    cb(null, frontin.get())
   })
 }
 

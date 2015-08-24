@@ -2,6 +2,7 @@
 // Copyright (c) 2014-2015, Jon Schlinkert (MIT)
 
 var fs = require('fs')
+var path = require('path')
 var extend = require('toolz/src/object/extend')
 var parsers = require('./lib/parsers')
 

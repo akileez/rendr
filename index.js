@@ -635,7 +635,7 @@ function Rendr (initialConfig) {
         if (strContains(path, 'views')) map.set(pathObj)
 
         // rendr only changed template
-        rendr(path, stack.get(), config.get(), opts.get(), function () {
+        rendr(pathObj, stack.get(), config.get(), opts.get(), function () {
           logger.done('rendered', 'Template')
           cb(null, 'rndr')
         })

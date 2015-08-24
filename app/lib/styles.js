@@ -46,7 +46,7 @@ function stylez (fp, globals, defaults, cb) {
     if (fp) {
       var keys = [getBaseDir(fp)]
     } else {
-      var keys = ['development', 'theme', 'vendor', 'bootstrap']
+      var keys = ['development', 'theme', 'vendor', 'framework']
     }
 
     var files = pick(defaults.LESSfilez, keys)

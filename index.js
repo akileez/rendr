@@ -660,7 +660,7 @@ function Rendr (initialConfig) {
 
             function reloadMatter (cb) {
               var fmap = {} //file map of YFM
-              frontMatter(globby.sync(opts.get('templates')), path, opts.get(), function (err, res) {
+              frontMatter(globby.sync(path), path, opts.get(), function (err, res) {
                 fmap.map = res
                 config.set(fmap)
                 cb(null, 'frontin')
@@ -717,7 +717,7 @@ function Rendr (initialConfig) {
             }
 
             function reStack (cb) {
-              buildLayoutStack(globby.sync(opts.get('layouts')), path, function (err, res) {
+              buildLayoutStack(globby.sync(path), path, function (err, res) {
                 stack.set(res)
                 cb(null, 'reStack')
               })

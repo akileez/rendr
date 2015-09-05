@@ -28,7 +28,7 @@ var iterate          = require('toolz/src/async/iterate')
 var concurrent       = require('toolz/src/async/concurrent')
 var contains         = require('toolz/src/array/contains')
 var strContains      = require('toolz/src/string/contains')
-var expander         = require('toolz/src/string/expander')
+var expand           = require('toolz/src/string/expand')
 var keys             = require('toolz/src/object/keys')
 var values           = require('toolz/src/object/values')
 var union            = require('toolz/src/array/union')
@@ -363,7 +363,7 @@ function Rendr (initialConfig) {
   function configContext (cb) {
     iterate.each(globby.sync(opts.get('context')), function (val, key, done) {
       parseCSON(val, {namespaced: false}, function (res) {
-        config.set(expander(res))
+        config.set(expand(res))
         done(null, key)
       })
     }, function (err, res) {

@@ -2,7 +2,7 @@
 // Copyright (c) 2014-2015, Jon Schlinkert (MIT)
 
 var extend = require('toolz/src/object/extend')
-var clrz = require('colorz')
+var clrz = require('toolz/src/util/colorz')
 
 var parser = module.exports
 parser.requires = {}

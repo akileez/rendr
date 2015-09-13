@@ -1,5 +1,6 @@
 # rendr
 [![experimental][stability-image]][stability-url]
+[![schoolmarm-standard-style][marm-image]][marm-url]
 [![ISC license][license-img]][license-url]
 
 see [sample output](https://github.com/akileez/rendr/wiki/sample-output) of earlier working version.  
@@ -147,5 +148,7 @@ into a mini application. Four weeks later rendr was born.
 
 [stability-image]: https://img.shields.io/badge/stability-experimental-orange.svg?style=flat-square
 [stability-url]: https://github.com/akileez/rendr
+[marm-image]: https://img.shields.io/badge/code%20style-marm-brightgreen.svg?style=flat-square
+[marm-url]: https://github.com/akileez/eslint-config-marm
 [license-img]: https://img.shields.io/badge/license-ISC-blue.svg?style=flat-square
 [license-url]: https://github.com/akileez/rendr/blob/master/license.md

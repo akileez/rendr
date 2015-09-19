@@ -17,8 +17,8 @@ var concurrent    = require('toolz/src/async/concurrent')
 var writeFile     = require('toolz/src/file/writeFile')
 var segments      = require('toolz/src/path/segments')
 var Map           = require('toolz/src/cache/map')
-var matter        = require('./src/matter')
 var layouts       = require('./src/layouts')
+var parsefm       = require('parse-yuf').sync
 var handlebars    = require('handlebars')
 var resolve       = require('resolve')
 var prettify      = require(resolve.sync('js-beautify', {basedir: '/usr/local/lib/node_modules'})).html
@@ -46,7 +46,7 @@ function rendr (files, stack, globals, defaults, cb) {
     if (meta.draft === true)  return done(null, key)
 
     // append destination to metadata
-    meta.dest = dest(page.path, meta, defaults)
+    meta.dest = dest(page.rel, meta, defaults)
 
     // check for and assign default layout
     if (isNullOrUndef(meta.layout) || !stack[meta.layout]) {
@@ -157,7 +157,7 @@ function buildLayoutStack (files, reset, cb) {
       return done(null, key)
     }
 
-    var page = matter.read(f)
+    var page = parsefm(f)
     var meta = page.data
     var text = page.content
 
@@ -193,7 +193,7 @@ function frontMatter (filenames, reset, defaults, cb) {
       return done(null, key)
     }
 
-    var metadata = matter.read(f).data
+    var metadata = parsefm(f).data
 
     metadata.buildInfoSTRT = '-----------------------'
 
@@ -247,7 +247,7 @@ function readFile (fn, opt) { // fn = filename;
     basename = segments.last(fn, 2, '-').replace(/\.hbs$/, '')
   }
 
-  page[basename] = matter.read(fn)
+  page[basename] = parsefm(fn, {extend: true})
   return page
 }
 

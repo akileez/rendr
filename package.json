@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "description": "A personal static site generator",
   "main": "index.js",
   "scripts": {},
@@ -26,6 +26,7 @@
     "argh": "^0.1.4",
     "glob": "^5.0.14",
     "handlebars": "^3.0.3",
+    "parse-yuf": "^0.1.12",
     "resolve": "^1.1.6",
     "toolz": "akileez/toolz"
   },

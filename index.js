@@ -991,5 +991,4 @@ function Rendr (initialConfig) {
 module.exports = Rendr
 module.exports.glob = globby
 module.exports.handlebars = handlebars
-module.exports.matter = require('./app/src/matter')
-
+module.exports.parsefm = require('parse-yuf').sync

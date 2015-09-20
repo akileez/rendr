@@ -18,7 +18,7 @@ var writeFile     = require('toolz/src/file/writeFile')
 var segments      = require('toolz/src/path/segments')
 var Map           = require('toolz/src/cache/map')
 var layouts       = require('./src/layouts')
-var parsefm       = require('parse-yuf').sync
+var parsefm       = require('parse-yuf')
 var handlebars    = require('handlebars')
 var resolve       = require('resolve')
 var prettify      = require(resolve.sync('js-beautify', {basedir: '/usr/local/lib/node_modules'})).html
@@ -157,7 +157,7 @@ function buildLayoutStack (files, reset, cb) {
       return done(null, key)
     }
 
-    var page = parsefm(f)
+    var page = parsefm.sync(f)
     var meta = page.data
     var text = page.content
 
@@ -193,7 +193,7 @@ function frontMatter (filenames, reset, defaults, cb) {
       return done(null, key)
     }
 
-    var metadata = parsefm(f).data
+    var metadata = parsefm.sync(f).data
 
     metadata.buildInfoSTRT = '-----------------------'
 
@@ -247,7 +247,7 @@ function readFile (fn, opt) { // fn = filename;
     basename = segments.last(fn, 2, '-').replace(/\.hbs$/, '')
   }
 
-  page[basename] = parsefm(fn, {extend: true})
+  page[basename] = parsefm.sync(fn, {extend: true})
   return page
 }
 

@@ -37,7 +37,7 @@ var jcolz            = require('toolz/src/util/jsonColorz')
 var getBaseDir       = require('./app/util/getBaseDir')
 var logger           = require('./app/util/logger')
 var ftree            = require('./app/util/fileTree')
-var parseCSON        = require('./app/util/parseCSON')
+var parsefm          = require('parse-yuf')
 var path             = require('path')
 var assert           = require('assert')
 
@@ -109,6 +109,9 @@ function Rendr (initialConfig) {
     logger.ready('Reading', 'configuration')
     config.set(initialConfig.globals)
     opts.set(initialConfig.defaults)
+    opts.set('csscomb', __dirname + '/app/cfg/csscomb.json')
+    opts.set('pretty', require('./app/cfg/pretty'))
+    opts.set('uncss', require('./app/cfg/uncss'))
   } else {
     logger.ready('Reading', 'RENDR.cson')
     parseCSON('./RENDR.cson', {type: 'CS'}, function (res) {
@@ -134,7 +137,6 @@ function Rendr (initialConfig) {
     var opsRendr = [
       wipe,
       register,
-      configOptions,
       configContext,
       makeFavicon,
       rsyncSupport,
@@ -170,14 +172,6 @@ function Rendr (initialConfig) {
 
   // get initial settings, user and app configs
   if (argv.argv == 'config') {
-    if (argv.type == 'defaults') {
-      logger.ready('displaying', 'defaults')
-      var opsConfig = [configOptions]
-      return iterate.series(opsConfig, function (err) {
-        assert.ifError(err)
-        jcolz(opts.get())
-      })
-    }
     if (argv.type == 'globals') {
       logger.ready('displaying', 'globals')
       var opsConfig = [configContext]
@@ -345,25 +339,11 @@ function Rendr (initialConfig) {
     })
   }
 
-  function configOptions (cb) {
-    var configFilez = __dirname + '/app/cfg/*.cson'
-    iterate.each(globby.sync(configFilez), function (val, key, done) {
-      parseCSON(val, {type: 'CS', namespaced: true}, function (res) {
-        opts.set(res)
-        opts.set('csscomb', __dirname + '/app/cfg/csscomb.json')
-        done(null, key)
-      })
-    }, function (err, res) {
-      assert.ifError(err)
-      // jcolz(opts.get())
-      cb(null, 'reconfigOptions')
-    })
-  }
-
   function configContext (cb) {
     iterate.each(globby.sync(opts.get('context')), function (val, key, done) {
-      parseCSON(val, {namespaced: false}, function (res) {
-        config.set(expand(res))
+      parsefm(val, function (err, res) {
+        assert.ifError(err)
+        config.set(expand(res.data))
         done(null, key)
       })
     }, function (err, res) {
@@ -842,27 +822,6 @@ function Rendr (initialConfig) {
             logger.ready('Watching:', 'modules')
           }),
 
-        // Watch Configs.
-        // /////////////////////////////////////////////////////////////////////////////////
-        configuration: chokidar.watch(opts.get('configs'), watchOpts)
-          .on('change', function(fp) {
-            logger.changed(fp)
-
-            function reConfigs (cb) {
-              parseCSON(fp, {type: 'CS', namespaced: true}, function (res) {
-                opts.set(res)
-                // jcolz(opts.get())
-                logger.done('reloaded', 'Configs')
-                cb(null, 'configs')
-              })
-            }
-
-            var opsPartials = [reConfigs, rendrTemplates]
-            iterate.series(opsPartials, function (err, res) {
-              assert.ifError(err)
-            })
-          }),
-
         // Watch Globals.
         // /////////////////////////////////////////////////////////////////////////////////
         globaldata: chokidar.watch(opts.get('context'), watchOpts)
@@ -870,8 +829,8 @@ function Rendr (initialConfig) {
             logger.changed(fp)
 
             function reGdata (cb) {
-              parseCSON(fp, {namespaced: false}, function (res) {
-                config.set(res)
+              parsefm(fp, function (err, res) {
+                config.set(expand(res.data))
                 logger.done('changed', 'Global context')
                 cb(null, 'gdata')
               })
@@ -991,4 +950,4 @@ function Rendr (initialConfig) {
 module.exports = Rendr
 module.exports.glob = globby
 module.exports.handlebars = handlebars
-module.exports.parsefm = require('parse-yuf').sync
+module.exports.parsefm = parsefm.sync

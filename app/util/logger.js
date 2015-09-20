@@ -59,8 +59,8 @@ module.exports = {
 
   jobsDisplay: function () {
     var arr = [
-      [yel('Jobs'), grn('globals:'), dim(blk('Display initial global configuration'))],
-      [yel('Jobs'), grn('defaults:'), dim(blk('Display initial default options'))],
+      [yel('Jobs'), grn('config:'), dim(blk('--type=globals Display initial global configuration'))],
+      [yel('Jobs'), grn('config:'), dim(blk('--type=defaults Display initial default options'))],
       [yel('Jobs'), grn('jobs:'), dim(blk('Display listing of all jobs'))],
       [yel('Jobs'), grn('rendr:'), dim(blk('Default job. Render templates. Nothing else'))],
       [yel('Jobs'), grn('init:'), dim(blk('Clean staging and build directories, generate all support files, rendr templates.'))],

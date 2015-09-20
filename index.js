@@ -105,20 +105,12 @@ function Rendr (initialConfig) {
   // ///////////////////////////////////////////////////////////////////////////////
 
   // initialize app with settings
-  if (initialConfig) {
-    logger.ready('Reading', 'configuration')
-    config.set(initialConfig.globals)
-    opts.set(initialConfig.defaults)
-    opts.set('csscomb', __dirname + '/app/cfg/csscomb.json')
-    opts.set('pretty', require('./app/cfg/pretty'))
-    opts.set('uncss', require('./app/cfg/uncss'))
-  } else {
-    logger.ready('Reading', 'RENDR.cson')
-    parseCSON('./RENDR.cson', {type: 'CS'}, function (res) {
-      config.set(res.globals)
-      opts.set(res.defaults)
-    })
-  }
+  logger.ready('Reading', 'configuration')
+  config.set(initialConfig.globals)
+  opts.set(initialConfig.defaults)
+  opts.set('csscomb', __dirname + '/app/cfg/csscomb.json')
+  opts.set('pretty', require('./app/cfg/pretty'))
+  opts.set('uncss', require('./app/cfg/uncss'))
 
   if (argv.argv == 'jobs') {
     logger.jobsDisplay()

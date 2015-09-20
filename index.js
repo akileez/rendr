@@ -159,19 +159,12 @@ function Rendr (initialConfig) {
     })
   }
 
-  // get initial settings read in from the initialConfig/RENDR.cson file
-  if (argv.argv == 'globals') {
-    logger.ready('displaying', 'globals')
-    jcolz(config.get())
-  }
-
-  if (argv.argv == 'defaults') {
-    logger.ready('displaying', 'defaults')
-    jcolz(opts.get())
-  }
-
-  // get initial settings, user and app configs
+  // get initial settings read in from the initialConfig
   if (argv.argv == 'config') {
+    if (argv.type == 'defaults') {
+      logger.ready('displaying', 'defaults')
+      jcolz(opts.get())
+    }
     if (argv.type == 'globals') {
       logger.ready('displaying', 'globals')
       var opsConfig = [configContext]

@@ -92,12 +92,6 @@ function Rendr (initialConfig) {
     argv.v = true   // asset revision
   }
 
-  // if no task name given, set default task name to `rendr`
-  if (argv.argv === undefined ) {
-    argv.r = true
-    argv.argv = 'rendr'
-  }
-
   // display summary of environment variables
   logger.infoDisplay(config.get(), argv)
 
@@ -112,10 +106,6 @@ function Rendr (initialConfig) {
   opts.set('pretty', require('./app/cfg/pretty'))
   opts.set('uncss', require('./app/cfg/uncss'))
 
-  if (argv.argv == 'jobs') {
-    logger.jobsDisplay()
-  }
-
   if (argv.x) {
     var styles  = require('./app/lib/styles')
     var scripts = require('./app/lib/scripts')
@@ -125,7 +115,10 @@ function Rendr (initialConfig) {
 
   // Rendr Tasks
   // ///////////////////////////////////////////////////////////////////////////////
-  if (argv.argv == 'rendr') {
+  // if no task name given, set default task name to `rendr`
+  if (argv.argv == 'rendr' || argv.argv === undefined) {
+    argv.r = true
+
     var opsRendr = [
       wipe,
       register,
@@ -149,6 +142,10 @@ function Rendr (initialConfig) {
     iterate.series(opsRendr, function (err) {
       assert.ifError(err)
     })
+  }
+
+  if (argv.argv == 'jobs') {
+    logger.jobsDisplay()
   }
 
   // get initial settings read in from the initialConfig

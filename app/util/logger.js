@@ -1,4 +1,4 @@
-var clrz = require('toolz/src/util/colorz')
+var clrz = require('colorz')
 var dateFormat = require('toolz/src/date/dateFormat')
 var log = require('toolz/src/time/logger')
 var clog        = console.log.bind(console)

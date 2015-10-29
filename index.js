@@ -92,6 +92,8 @@ function Rendr (initialConfig) {
     argv.v = true   // asset revision
   }
 
+  if (argv.argv === undefined) argv.argv = 'rendr'
+
   // display summary of environment variables
   logger.infoDisplay(config.get(), argv)
 
@@ -116,7 +118,7 @@ function Rendr (initialConfig) {
   // Rendr Tasks
   // ///////////////////////////////////////////////////////////////////////////////
   // if no task name given, set default task name to `rendr`
-  if (argv.argv == 'rendr' || argv.argv === undefined) {
+  if (argv.argv == 'rendr') {
     argv.r = true
 
     var opsRendr = [

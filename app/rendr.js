@@ -73,9 +73,9 @@ function rendr (files, stack, globals, defaults, cb) {
     })
 
     // mkdir if non-existant, write file to dest and prettify rendered template
-    return writeFile(meta.dest.fpath, rendrFilez(template(context), defaults), function (err) {
+    return writeFile(meta.dest.bpath, rendrFilez(template(context), defaults), function (err) {
       assert.ifError(err)
-      logger.file(meta.dest.fpath, 'rendered')
+      logger.file(meta.dest.bpath, 'rendered')
       done(null, key)
     })
   }, function (err, result) {
@@ -131,9 +131,9 @@ function dest (file, meta, defaults) {
   }
 
   results = {
-    dirname  : buildDir,
-    bpath    : buildDir + buildPath,
-    fpath    : buildDirPathFileExt,
+    dirname  : buildDir,            // build directory
+    bpath    : buildDirPathFileExt, // build path
+    spath    : file,                // source path
     basename : buildFileExt,
     name     : buildFile,
     extname  : buildExt

@@ -34,7 +34,11 @@ var stackin       = new Map()
 // ///////////////////////////////////////////////////////////////////////////////
 
 function rendr (files, stack, globals, defaults, cb) {
-  iterate.each(files, function (page, key, done) {
+  var fn = defaults.generator === 'concurrent'
+    ? concurrent
+    : iterate
+
+  fn.each(files, function (page, key, done) {
     var tmpl = {}
     // read file, normalize output
     // console.log(f, ' processing')

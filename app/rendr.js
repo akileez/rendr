@@ -92,16 +92,16 @@ function rendr (files, stack, globals, defaults, cb) {
 function rendrFilez (template, defaults) {
   // if (meta.extname === 'xml') return template
   // built for js-beautify and custom enhancements
-  if (defaults.engine === 'html') {
-    return prettify(template, defaults.pretty[defaults.engine])
+  if (defaults.extension === 'html') {
+    return prettify(template, defaults.pretty[defaults.extension])
       .replace(/(<\/(a|span|strong|em|h1|h2|h3|h4|h5|h6)>(?!(,|\.|!|\?|;|:)))/g, "$1 ")
       .replace(/(\r\n|\n){2,}/g, "\n")
       .replace(/(\s*(?:<!--|\/\*)\s*)(?:(?!.+(\s*(?:<!--|\/\*)\s*)))/g, "\n$1")
-  } else if (defaults.engine === 'css') {
-    return prettify(template, defaults.pretty[defaults.engine])
+  } else if (defaults.extension === 'css') {
+    return prettify(template, defaults.pretty[defaults.extension])
       // put future replacements here for further beautifying
-  } else if (defaults.engine === 'js') {
-    return prettify(template, defaults.pretty[defaults.engine])
+  } else if (defaults.extension === 'js') {
+    return prettify(template, defaults.pretty[defaults.extension])
       // put future replacements here for further beautifying
   } else {
     return template
@@ -118,9 +118,9 @@ function dest (file, meta, defaults) {
 
   var pathSeparator = '/'
   var buildDir      = defaults.destination
-  var buildFileExt  = path.basename(file).replace(/hbs$/, meta.extname || defaults.engine)
+  var buildFileExt  = path.basename(file).replace(/hbs$/, meta.extname || defaults.extension)
   var buildFile     = path.basename(file, path.extname(file))
-  var buildExt      = path.extname(file).replace(/hbs$/, meta.extname || defaults.engine)
+  var buildExt      = path.extname(file).replace(/hbs$/, meta.extname || defaults.extension)
   var buildPath     = path.dirname(file).replace(defaults.templateRoot, '')
   var buildDirFileExt
   var buildDirPathFileExt
@@ -211,16 +211,16 @@ function frontMatter (filenames, reset, defaults, cb) {
       metadata.buildDirFileExt = metadata.buildDir
         + pathSeparator
         + path.basename(f)
-        .replace(/hbs$/, defaults.engine)
+        .replace(/hbs$/, defaults.extension)
     } else {
       metadata.buildDirFileExt = pathSeparator
         + path.basename(f)
-        .replace(/hbs$/, defaults.engine)
+        .replace(/hbs$/, defaults.extension)
     }
 
-    metadata.buildFileExt = path.basename(f).replace(/hbs$/, defaults.engine)
+    metadata.buildFileExt = path.basename(f).replace(/hbs$/, defaults.extension)
     metadata.buildFile    = path.basename(f, path.extname(f))
-    metadata.buildExt     = path.extname(f).replace(/hbs$/, defaults.engine)
+    metadata.buildExt     = path.extname(f).replace(/hbs$/, defaults.extension)
     metadata.buildPath    = defaults.destination + metadata.buildDir
     metadata.buildDest    = defaults.destination + metadata.buildDirFileExt
 

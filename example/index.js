@@ -14,14 +14,16 @@ var configuration = {
   // defaults object aka options
   defaults: {
     // General
+    // template generator. process files concurrently [concurrent] or serially [iterate]
+    generator: 'iterate',
     // build directory
     destination   : 'build',
     // asset staging
     stagingArea   : 'assets',
     // where static assets reside
     staticAssets  : 'support',
-    // really this is just the extension to use for files. not really an engine.
-    engine        : 'html',
+    // the extension to use for processed files.
+    extension     : 'html',
     // default layout name
     defaultLayout : 'default',
     // regex to filter out directory structure from build directory so I may
@@ -43,7 +45,7 @@ var configuration = {
     scripts   : 'scripts/**/*.js',
     support   : 'support/**/*',
     stage     : 'assets/{img,pdf,fonts}/**/*',
-    context   : 'config/**/*.cson',
+    context   : 'config/**/*.yml',
     html      : 'build/**/*.html',
     build     : ['build/**/*', '!build/assets/**', '!build/assets'],
     // Tree support

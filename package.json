@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.1.48",
+  "version": "0.1.49",
   "description": "A personal static site generator",
   "main": "index.js",
   "scripts": {},

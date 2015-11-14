@@ -182,49 +182,55 @@ function buildLayoutStack (files, reset, cb) {
 
 // frontMatter
 // ///////////////////////////////////////////////////////////////////////////////
-
-function frontMatter (filenames, reset, defaults, cb) {
-  // build an object of all templates' yaml-front-matter and append file path
-  // metadata to each key. Used for navigation, collections, sitemaps, sorting
-  // and many other things.
+function matter (filenames, reset, defaults, cb) {
   var parsed = {}
   var pathSeparator = '/'
 
   iterate.each(filenames, function (f, key, done) {
-    var baseName = segments.last(f, 2, '-').replace(/\.hbs$/, '')
+    var baseName = key
+    var chkReset
 
-    if (frontin.has(baseName) && f !== reset) {
+    // this logic is not complete but this is
+    // the basics of what I am looking for.
+    if (reset) chkReset = key
+    else chkReset = reset
+
+    if (frontin.has(baseName) && key !== chkReset) {
       return done(null, key)
     }
 
-    var metadata = parsefm.sync(f).data
+    var metadata = extend({}, f.data)
 
-    metadata.buildInfoSTRT = '-----------------------'
-
-    if (metadata.pubDate) metadata.iso8601Date = dateFormat(metadata.pubDate, 'iso')
-
+    var build = {}
+    if (metadata.pubDate) build.iso8601Date = dateFormat(metadata.pubDate, 'iso')
     // set regex to remove path items which will not translate
     // to the build directory in the options
-    metadata.buildDir = path.dirname(f).replace(defaults.templateRoot, '')
+    build.dir = path.dirname(f.rel).replace(defaults.templateRoot, '')
 
-    if (metadata.buildDir) {
-      metadata.buildDirFileExt = metadata.buildDir
+    if (build.dir) {
+      build.dirFileExt = build.dir
         + pathSeparator
-        + path.basename(f)
+        + path.basename(f.rel)
         .replace(/hbs$/, defaults.extension)
     } else {
-      metadata.buildDirFileExt = pathSeparator
-        + path.basename(f)
+      build.dirFileExt = pathSeparator
+        + path.basename(f.rel)
         .replace(/hbs$/, defaults.extension)
     }
 
-    metadata.buildFileExt = path.basename(f).replace(/hbs$/, defaults.extension)
-    metadata.buildFile    = path.basename(f, path.extname(f))
-    metadata.buildExt     = path.extname(f).replace(/hbs$/, defaults.extension)
-    metadata.buildPath    = defaults.destination + metadata.buildDir
-    metadata.buildDest    = defaults.destination + metadata.buildDirFileExt
+    build.fileExt = path.basename(f.rel).replace(/hbs$/, defaults.extension)
+    build.ext     = path.extname(f.rel).replace(/hbs$/, defaults.extension)
+    build.file    = path.basename(f.rel, path.extname(f.rel))
+    build.path    = defaults.destination + build.dir
+    build.dest    = defaults.destination + build.dirFileExt
 
-    metadata.buildInfoEND = '------------------------'
+
+    metadata.src = {
+      abs: f.abs,
+      rel: f.rel,
+    }
+    metadata.file = f.file
+    metadata.build = build
 
     parsed[baseName] = metadata
 
@@ -259,6 +265,6 @@ function readFile (fn, opt) { // fn = filename;
 // ///////////////////////////////////////////////////////////////////////////////
 
 exports.rendr = rendr
-exports.frontMatter = frontMatter
+exports.matter = matter
 exports.buildLayoutStack = buildLayoutStack
 exports.readFile = readFile

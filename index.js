@@ -20,7 +20,7 @@ var handlebars       = require('handlebars')
 var globby           = require('./app/src/globby')
 var registrar        = require('./app/src/registrarHandlebars')
 var rendr            = require('./app/rendr').rendr
-var frontMatter      = require('./app/rendr').frontMatter
+var matter           = require('./app/rendr').matter
 var buildLayoutStack = require('./app/rendr').buildLayoutStack
 var readFile         = require('./app/rendr').readFile
 var Config           = require('toolz/src/cache/cfg')
@@ -134,7 +134,6 @@ function Rendr (initialConfig) {
       reScriptz,
       rsyncStatic,
       loadTemplates,
-      loadMatter,
       buildFileTree,
       pageMap,
       layoutStack,
@@ -419,36 +418,33 @@ function Rendr (initialConfig) {
   }
 
   // Normalized file object of Template Views and Sources
+  // Map frontMatter (YAML) to normalized object for each template
   function loadTemplates (cb) {
-    // map.del()
+    var nfmap // new front-matter map
+
     iterate.each(globby.sync(opts.get('templates')), function (val, key, done) {
       map.set(readFile(val))
       done(null, key)
     }, function (err, res) {
       assert.ifError(err)
-      if (argv.d) {
-        iterate.each(globby.sync(opts.get('sources')), function (val, key, done) {
-          map.set(readFile(val))
-          done(null, key)
-        }, function (err, res) {
-          assert.ifError(err)
-          cb(null, 'loadTemplates')
-        })
-      } else {
-        cb(null, 'loadTemplates')
-      }
-    })
-  }
+      nfmap = {}
 
-  // Map frontMatter (YAML/CSON) to normalized object for each template rendered
-  // Not to be confused with loadTemplates which generates a file map object for
-  // each template. This object is attached to Global Data.
-  function loadMatter (cb) {
-    var fmap = {} //file map of YFM
-    frontMatter(globby.sync(opts.get('templates')), false, opts.get(), function (err, res) {
-      fmap.map = res
-      config.set(fmap)
-      cb(null, 'fmap')
+      matter(map.get(), false, opts.get(), function (err, res) {
+        nfmap.map = res
+        config.set(nfmap)
+
+        if (argv.d) {
+          iterate.each(globby.sync(opts.get('sources')), function (val, key, done) {
+            map.set(readFile(val))
+            done(null, key)
+          }, function (err, res) {
+            assert.ifError(err)
+            cb(null, 'loadTemplates')
+          })
+        } else {
+          cb(null, 'loadTemplates')
+        }
+      })
     })
   }
 
@@ -583,7 +579,7 @@ function Rendr (initialConfig) {
 
   // Large section of code which could use a consolidation of sorts into a plain function with
   // parameters passed to it for configuration. Still working on that part. Main logic of program
-  // presented here running under bach. Using flags via argh.argv to filter whether or not
+  // presented here running under toolz/src/async/iterate. Using flags via argh.argv to filter whether or not
   // watch will run.
   function watch (cb) {
     if (argv.w) {
@@ -597,10 +593,20 @@ function Rendr (initialConfig) {
       }
 
       var rndrSingleFile = function (path, cb) {
-        // get updated content from template.
+        // get updated template object.
         var pathObj = readFile(path)
-        // reset cache with updated template
-        if (strContains(path, 'views')) map.set(pathObj)
+        // reset the file cache and frontmatter
+        if (strContains(path, 'views')) {
+          map.set(pathObj)
+
+          var nfmap = {}
+
+          matter(map.get(pathObj), true, opts.get(), function (err, res) {
+            // namespace the frontmatter object
+            nfmap.map = res
+            config.set(nfmap)
+          })
+        }
 
         // rendr only changed template
         rendr(pathObj, stack.get(), config.get(), opts.get(), function () {
@@ -626,16 +632,8 @@ function Rendr (initialConfig) {
               })
             }
 
-            function reloadMatter (cb) {
-              var fmap = {} //file map of YFM
-              frontMatter(globby.sync(path), path, opts.get(), function (err, res) {
-                fmap.map = res
-                config.set(fmap)
-                cb(null, 'frontin')
-              })
-            }
+            var opsTemplates = [rndrFilez]
 
-            var opsTemplates = [reloadMatter, rndrFilez]
             iterate.series(opsTemplates, function(err, res) {
               assert.ifError(err)
             })
@@ -660,7 +658,8 @@ function Rendr (initialConfig) {
               })
             }
 
-            var opsTemplates = [rndrFilez, loadTemplates]
+            var opsTemplates = [rndrFilez] // loadTemplates
+
             iterate.series(opsTemplates, function(err, res) {
               assert.ifError(err)
             })

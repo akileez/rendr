@@ -658,7 +658,7 @@ function Rendr (initialConfig) {
               })
             }
 
-            var opsTemplates = [rndrFilez] // loadTemplates
+            var opsTemplates = [rndrFilez]
 
             iterate.series(opsTemplates, function(err, res) {
               assert.ifError(err)
@@ -691,7 +691,7 @@ function Rendr (initialConfig) {
             }
 
             if (getBaseDir(path, 'self') === 'layout-sitemap') {
-              var opsLayouts = [reStack, donemsg, rndrFilez, loadTemplates]
+              var opsLayouts = [reStack, donemsg, rndrFilez]
               iterate.series(opsLayouts, function (err, res) {
                 assert.ifError(err)
               })

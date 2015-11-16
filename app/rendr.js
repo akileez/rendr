@@ -10,6 +10,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 var extend     = require('toolz/src/object/extend')
+var omit       = require('toolz/src/object/omit')
 var dateFormat = require('toolz/src/date/dateFormat')
 var isNil      = require('toolz/src/lang/isNil')
 var iterate    = require('toolz/src/async/iterate')
@@ -199,7 +200,7 @@ function matter (filenames, reset, defaults, cb) {
       return done(null, key)
     }
 
-    var metadata = extend({}, f.data)
+    var metadata = extend({}, omit(f.data, 'dest'))
 
     var build = {}
     if (metadata.pubDate) build.iso8601Date = dateFormat(metadata.pubDate, 'iso')

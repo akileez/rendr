@@ -20,7 +20,7 @@ var pick       = require('toolz/src/object/pick')
 var union      = require('toolz/src/array/union')
 var logger     = require('../util/logger')
 var getBaseDir = require('../util/getBaseDir')
-var globby     = require('../src/globby')
+var globby     = require('toolz/src/glob/globby')
 var rsync      = require('./support').sync
 
 // var modernizr = require('../nodes/customizr');

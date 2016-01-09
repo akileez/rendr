@@ -17,19 +17,19 @@ var iterate    = require('toolz/src/async/iterate')
 var concurrent = require('toolz/src/async/concurrent')
 var writeFile  = require('toolz/src/file/writeFile')
 var segments   = require('toolz/src/path/segments')
-var Map        = require('toolz/src/cache/map')
-var layouts    = require('./src/layouts')
+var Map        = require('toolz/src/cache/methos')
+var layouts    = require('toolz/src/helper/layoutStack')
 var parsefm    = require('parse-yuf')
-var handlebars = require('handlebars')
-var resolve    = require('resolve')
-var prettify   = require(resolve.sync('js-beautify', {basedir: '/usr/local/lib/node_modules'})).html
+var handlebars = require('toolz/src/helper/handlebars')
+var resolve    = require('toolz/src/path/resolve')
+var prettify   = require('toolz/src/text/js-beautify').html
 var path       = require('path')
 var assert     = require('assert')
 var logger     = require('./util/logger')
 
-var cache      = new Map()
-var frontin    = new Map()
-var stackin    = new Map()
+var cache      = Map()
+var frontin    = Map()
+var stackin    = Map()
 
 // Rendr Process
 // ///////////////////////////////////////////////////////////////////////////////

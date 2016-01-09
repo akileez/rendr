@@ -1,4 +1,4 @@
-var resolve   = require('resolve')
+var resolve   = require('toolz/src/path/resolve')
 var uncss     = require(resolve.sync('uncss', {basedir: '/usr/local/lib/node_modules'}))
 var writeFile = require('toolz/src/file/writeFile')
 var assert    = require('assert')

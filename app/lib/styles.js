@@ -12,7 +12,7 @@
 var writeFile          = require('toolz/src/file/writeFile')
 var readFile           = require('toolz/src/file/readFile')
 var path               = require('path')
-var resolve            = require('resolve')
+var resolve            = require('toolz/src/path/resolve')
 var Less               = require(resolve.sync('less', {basedir: '/usr/local/lib/node_modules'}))
 var lessPlugAutoPrefix = require(resolve.sync('less-plugin-autoprefix', {basedir: '/usr/local/lib/node_modules'}))
 var lessPlugCssComb    = require(resolve.sync('less-plugin-csscomb', {basedir: '/usr/local/lib/node_modules'}))

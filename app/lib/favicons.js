@@ -1,4 +1,4 @@
-var resolve  = require('resolve')
+var resolve  = require('toolz/src/path/resolve')
 var favicons = require(resolve.sync('favicons', {basedir: '/usr/local/lib/node_modules'}))
 
 // Image Optimization

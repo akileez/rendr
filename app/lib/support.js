@@ -12,7 +12,7 @@
 var exec     = require('child_process').exec
 var assert   = require('assert')
 var mkdirp   = require('toolz/src/file/mkdirp')
-var rimraf   = require('../src/rimraf')
+var rimraf   = require('toolz/src/file/rimraf')
 var logger   = require('../util/logger')
 
 // Rsync assets ==> stage to build dir

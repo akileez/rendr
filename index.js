@@ -19,10 +19,6 @@ var resolve          = require('toolz/src/path/resolve')
 var handlebars       = require('toolz/src/helper/handlebars')
 var globby           = require('toolz/src/glob/globby')
 var registrar        = require('toolz/src/helper/registrarHandlebars')
-var rendr            = require('./app/rendr').rendr
-var matter           = require('./app/rendr').matter
-var buildLayoutStack = require('./app/rendr').buildLayoutStack
-var readFile         = require('./app/rendr').readFile
 var Config           = require('toolz/src/cache/methos')
 var iterate          = require('toolz/src/async/iterate')
 var concurrent       = require('toolz/src/async/concurrent')
@@ -33,11 +29,15 @@ var keys             = require('toolz/src/object/keys')
 var values           = require('toolz/src/object/values')
 var union            = require('toolz/src/array/union')
 var wrap             = require('toolz/src/async/wrap')
+var jcolz            = require('toolz/src/util/jcolorz')
+var parsefm          = require('toolz/src/yaml/parsefm')
+var rendr            = require('./app/rendr').rendr
+var matter           = require('./app/rendr').matter
+var buildLayoutStack = require('./app/rendr').buildLayoutStack
+var readFile         = require('./app/rendr').readFile
 var getBaseDir       = require('./app/util/getBaseDir')
 var logger           = require('./app/util/logger')
 var ftree            = require('./app/util/fileTree')
-var jcolz            = require('toolz/src/util/jcolorz')
-var parsefm          = require('parse-yuf')
 var path             = require('path')
 var assert           = require('assert')
 
@@ -547,7 +547,7 @@ function Rendr (initialConfig) {
     if (argv.v && argv.d) {
       logger.info('Begin file revision')
 
-      var hashAssets = require('./app/lib/hashAssets')
+      var hashAssets = require('toolz/src/file/revAssets')
       var hashReplace = require('./app/lib/hashRev')
       var defs = opts.get()
 

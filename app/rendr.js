@@ -19,13 +19,14 @@ var writeFile  = require('toolz/src/file/writeFile')
 var segments   = require('toolz/src/path/segments')
 var Map        = require('toolz/src/cache/methos')
 var layouts    = require('toolz/src/helper/layoutStack')
-var parsefm    = require('parse-yuf')
+var parsefm    = require('toolz/src/yaml/parsefm')
+var vfo        = require('toolz/src/file/vfo')
 var handlebars = require('toolz/src/helper/handlebars')
 var resolve    = require('toolz/src/path/resolve')
 var prettify   = require('toolz/src/text/js-beautify').html
+var logger     = require('./util/logger')
 var path       = require('path')
 var assert     = require('assert')
-var logger     = require('./util/logger')
 
 var cache      = Map()
 var frontin    = Map()
@@ -247,19 +248,22 @@ function matter (filenames, reset, defaults, cb) {
 
 // readFile
 // ///////////////////////////////////////////////////////////////////////////////
+function readFile (fp, opt) {
+  // create namespaced object to return
+  // contents of filepath (fp) processed from
+  // fixed function parsefm.sync (front-matter-extractor)
+  var nsp = {}
+  var key
 
-function readFile (fn, opt) { // fn = filename;
-  var page = {}
-  var basename
+  // build the key
+  if (opt) key = segments.last(fp).replace(/\.hbs$/, '')
+  else key = segments.last(fp, 2, '-').replace(/\.hbs$/, '')
 
-  if (opt) {
-    basename = segments.last(fn).replace(/\.hbs$/, '')
-  } else {
-    basename = segments.last(fn, 2, '-').replace(/\.hbs$/, '')
-  }
+  // assign virtual file object to key
+  nsp[key] = vfo(fp, parsefm.sync, true)
 
-  page[basename] = parsefm.sync(fn, {extend: true})
-  return page
+  // return namespaced object
+  return nsp
 }
 
 // Expose API

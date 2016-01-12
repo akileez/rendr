@@ -1,6 +1,6 @@
 {
   "name": "rendr",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A personal static site generator",
   "main": "index.js",
   "scripts": {},
@@ -23,7 +23,6 @@
   "license": "ISC",
   "keywords": [],
   "dependencies": {
-    "parse-yuf": "^0.1.12",
     "toolz": "akileez/toolz"
   },
   "devDependencies": {},

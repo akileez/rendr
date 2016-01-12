@@ -260,7 +260,7 @@ function readFile (fp, opt) {
   else key = segments.last(fp, 2, '-').replace(/\.hbs$/, '')
 
   // assign virtual file object to key
-  nsp[key] = vfo(fp, parsefm.sync, true)
+  nsp[key] = vfo.stats(fp, parsefm.sync)
 
   // return namespaced object
   return nsp

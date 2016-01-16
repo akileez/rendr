@@ -115,15 +115,15 @@ function dest (page, meta, defaults) {
   // purpose to simulate vinly-fs dest info for appending to metadata
   // of each file. Used to determine relative file path for navigation
 
-  var base = segments.last(page.rel, 2, '-').replace(/\.hbs$/, '')
+  var base = segments.last(page.path.rel, 2, '-').replace(/\.hbs$/, '')
   if (cache.has(base)) return cache.get(base)
 
   var pathSeparator = '/'
   var buildDir      = defaults.destination
-  var buildFile     = page.base
+  var buildFile     = page.path.base
   var buildExt      = meta.extname || defaults.extension
   var buildFileExt  = buildFile + '.' + buildExt
-  var buildPath     = path.dirname(page.rel).replace(defaults.templateRoot, '')
+  var buildPath     = path.dirname(page.path.rel).replace(defaults.templateRoot, '')
   var buildDirFileExt
   var buildDirPathFileExt
   var results
@@ -139,7 +139,7 @@ function dest (page, meta, defaults) {
   results = {
     dirname  : buildDir,            // build directory
     bpath    : buildDirPathFileExt, // build path
-    spath    : page.rel,            // source path
+    spath    : page.path.rel,            // source path
     basename : buildFileExt,
     name     : buildFile,
     extname  : buildExt

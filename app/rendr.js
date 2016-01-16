@@ -52,7 +52,7 @@ function rendr (files, stack, globals, defaults, cb) {
     if (meta.draft === true)  return done(null, key)
 
     // append destination to metadata
-    meta.dest = dest(page.rel, meta, defaults)
+    meta.dest = dest(page, meta, defaults)
 
     // check for and assign default layout
     if (isNil(meta.layout) || !stack[meta.layout]) {
@@ -110,20 +110,20 @@ function rendrFilez (template, defaults) {
   }
 }
 
-function dest (file, meta, defaults) {
+function dest (page, meta, defaults) {
   // get file information and return (annotated version of frontMatter() )
   // purpose to simulate vinly-fs dest info for appending to metadata
   // of each file. Used to determine relative file path for navigation
 
-  var base = file.replace(/\.hbs$/, '')
+  var base = segments.last(page.rel, 2, '-').replace(/\.hbs$/, '')
   if (cache.has(base)) return cache.get(base)
 
   var pathSeparator = '/'
   var buildDir      = defaults.destination
-  var buildFileExt  = path.basename(file).replace(/hbs$/, meta.extname || defaults.extension)
-  var buildFile     = path.basename(file, path.extname(file))
-  var buildExt      = path.extname(file).replace(/hbs$/, meta.extname || defaults.extension)
-  var buildPath     = path.dirname(file).replace(defaults.templateRoot, '')
+  var buildFile     = page.base
+  var buildExt      = meta.extname || defaults.extension
+  var buildFileExt  = buildFile + '.' + buildExt
+  var buildPath     = path.dirname(page.rel).replace(defaults.templateRoot, '')
   var buildDirFileExt
   var buildDirPathFileExt
   var results
@@ -139,7 +139,7 @@ function dest (file, meta, defaults) {
   results = {
     dirname  : buildDir,            // build directory
     bpath    : buildDirPathFileExt, // build path
-    spath    : file,                // source path
+    spath    : page.rel,            // source path
     basename : buildFileExt,
     name     : buildFile,
     extname  : buildExt
@@ -185,8 +185,9 @@ function buildLayoutStack (files, reset, cb) {
 // frontMatter
 // ///////////////////////////////////////////////////////////////////////////////
 function matter (filenames, reset, defaults, cb) {
-  var parsed = {}
+  var nsp = {}
   var pathSeparator = '/'
+  var fileSeparator = '.'
 
   iterate.each(filenames, function (f, key, done) {
     var baseName = key
@@ -207,37 +208,35 @@ function matter (filenames, reset, defaults, cb) {
     if (metadata.pubDate) build.iso8601Date = dateFormat(metadata.pubDate, 'iso')
     // set regex to remove path items which will not translate
     // to the build directory in the options
-    build.dir = path.dirname(f.rel).replace(defaults.templateRoot, '')
+    build.dir = path.dirname(f.path.rel).replace(defaults.templateRoot, '')
 
     if (build.dir) {
       build.dirFileExt = build.dir
         + pathSeparator
-        + path.basename(f.rel)
-        .replace(/hbs$/, defaults.extension)
+        + f.path.base
+        + fileSeparator
+        + defaults.extension
     } else {
       build.dirFileExt = pathSeparator
-        + path.basename(f.rel)
-        .replace(/hbs$/, defaults.extension)
+        + f.path.base
+        + fileSeparator
+        + defaults.extension
     }
 
-    build.fileExt = path.basename(f.rel).replace(/hbs$/, defaults.extension)
-    build.ext     = path.extname(f.rel).replace(/hbs$/, defaults.extension)
-    build.file    = path.basename(f.rel, path.extname(f.rel))
+    build.fileExt = f.path.base + fileSeparator + defaults.extension
+    build.ext     = defaults.extension
+    build.file    = f.path.base
     build.path    = defaults.destination + build.dir
     build.dest    = defaults.destination + build.dirFileExt
 
 
-    metadata.src = {
-      abs: f.abs,
-      rel: f.rel,
-    }
-    metadata.file = f.file
+    metadata.path = f.path
     metadata.build = build
 
-    parsed[baseName] = metadata
+    nsp[baseName] = metadata
 
     // reset internal cache
-    frontin.set(baseName, parsed[baseName])
+    frontin.set(baseName, nsp[baseName])
 
     done(null, key)
   }, function (err, result) {

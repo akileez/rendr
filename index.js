@@ -503,9 +503,11 @@ function Rendr (initialConfig) {
   // opts   -- default options
   function rendrTemplates (cb) {
     if (argv.r) {
+      var strtTime = process.hrtime()
       logger.info('Begin', 'rendering')
+
       rendr(map.get(), stack.get(), config.get(), opts.get(), function () {
-        logger.done('rendered', 'Templates')
+        logger.done('rendered', 'Templates', strtTime)
         cb(null, 'rendrTemplates')
       })
     } else {

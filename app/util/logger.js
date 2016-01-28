@@ -1,7 +1,8 @@
-var clrz = require('colorz')
+var clrz       = require('colorz')
 var dateFormat = require('toolz/src/date/dateFormat')
-var log = require('toolz/src/time/logger')
-var clog        = console.log.bind(console)
+var log        = require('toolz/src/time/logger')
+var nano       = require('toolz/src/time/nano')
+var clog       = console.log.bind(console)
 
 // clrz settings for colorized output
 var blk = clrz.black
@@ -82,8 +83,16 @@ module.exports = {
     )
   },
 
-  done: function (noun, verb) {
-    log(
+  done: function (noun, verb, time) {
+    if (time) log(
+      red('Done'),
+      blu(verb),
+      grn(noun),
+      dim(blk('(')),
+      mag(nano(process.hrtime(time), 4) + 's'),
+      dim(blk(')'))
+    )
+    else log(
       red('Done'),
       blu(verb),
       grn(noun)

@@ -1,5 +1,5 @@
 var clrz       = require('colorz')
-var dateFormat = require('toolz/src/date/dateFormat')
+var dateFormat = require('toolz/src/date/clockin')
 var log        = require('toolz/src/time/logger')
 var nano       = require('toolz/src/time/nano')
 var clog       = console.log.bind(console)

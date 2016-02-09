@@ -11,7 +11,7 @@
 
 var extend     = require('toolz/src/object/extend')
 var omit       = require('toolz/src/object/omit')
-var dateFormat = require('toolz/src/date/dateFormat')
+var dateFormat = require('toolz/src/date/clockin')
 var isNil      = require('toolz/src/lang/isNil')
 var iterate    = require('toolz/src/async/iterate')
 var concurrent = require('toolz/src/async/concurrent')

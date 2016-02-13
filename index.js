@@ -14,7 +14,7 @@
 
 'use strict'
 
-var argv             = require('toolz/src/util/argh').argv
+var argv             = require('toolz/src/process/argh').argv
 var resolve          = require('toolz/src/path/resolve')
 var handlebars       = require('toolz/src/helper/handlebars')
 var globby           = require('toolz/src/glob/globby')

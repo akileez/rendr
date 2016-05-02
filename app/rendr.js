@@ -96,7 +96,7 @@ function rendrFilez (template, defaults) {
   // built for js-beautify and custom enhancements
   if (defaults.extension === 'html') {
     return prettify(template, defaults.pretty[defaults.extension])
-      .replace(/(<\/(a|span|strong|em|h1|h2|h3|h4|h5|h6)>(?!(,|\.|!|\?|;|:)))/g, "$1 ")
+      .replace(/(<\/(a|span|strong|em|h1|h2|h3|h4|h5|h6)>(?!(,|\.|!|\?|;|:)))/g, "$1")
       .replace(/(\r\n|\n){2,}/g, "\n")
       .replace(/(\s*(?:<!--|\/\*)\s*)(?:(?!.+(\s*(?:<!--|\/\*)\s*)))/g, "\n$1")
   } else if (defaults.extension === 'css') {

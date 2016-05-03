@@ -1,6 +1,6 @@
 var clrz       = require('colorz')
 var dateFormat = require('toolz/src/date/clockin')
-var log        = require('toolz/src/time/logger')
+var log        = require('toolz/src/debug/logr')
 var nano       = require('toolz/src/time/nano')
 var clog       = console.log.bind(console)
 
@@ -15,6 +15,9 @@ var grn = clrz.green
 var gry = clrz.grey
 var cyn = clrz.cyan
 
+log._time = function () {
+  return mag(dateFormat('logStamp'))
+}
 
 module.exports = {
   file: function (name, action) {

@@ -1,77 +1,51 @@
-var resolve  = require('toolz/src/path/resolve')
-var favicons = require(resolve.sync('favicons', {basedir: '/usr/local/lib/node_modules'}))
+var forEach   = require('toolz/src/array/forEach')
+var writeFile = require('toolz/src/file/writeFile')
+var resolve   = require('toolz/src/path/resolve')
+var favicons  = require(resolve.sync('favicons', {basedir: '/usr/local/lib/node_modules'}))
 
 // Image Optimization
 // ///////////////////////////////////////////////////////////////////////////////
 function makeICO (image, dest, cb) {
-  favicons({
-    files: {
-        // Path(s) for file to produce the favicons. `string` or `object`
-        src: image,
-        // Path for writing the favicons to. `string`
-        dest: [dest, '/'].join(''),
-        // Path(s) for HTML file to write or append metadata. `string` or `array`
-        html: null,
-        // Path for overriding default icons path. `string`
-        iconsPath: null,
-        // Path for an existing android_chrome_manifest.json. `string`
-        androidManifest: null,
-        // Path for an existing browserconfig.xml. `string`
-        browserConfig: null,
-        // Path for an existing manifest.webapp. `string`
-        firefoxManifest: null,
-        // Path for an existing yandex-browser-manifest.json. `string`
-        yandexManifest: null
-    },
+  var source = image
+  var config = {
+    appName: null,                  // Your application's name. `string`
+    appDescription: null,           // Your application's description. `string`
+    developerName: null,            // Your (or your developer's) name. `string`
+    developerURL: null,             // Your (or your developer's) URL. `string`
+    background: "#fff",             // Background colour for flattened icons. `string`
+    path: [dest, '/'].join(''),     // Path for overriding default icons path. `string`
+    url: "/",                       // Absolute URL for OpenGraph image. `string`
+    display: "standalone",          // Android display: "browser" or "standalone". `string`
+    orientation: "portrait",        // Android orientation: "portrait" or "landscape". `string`
+    version: "1.0",                 // Your application's version number. `number`
+    logging: false,                  // Print logs to console? `boolean`
+    online: false,                  // Use RealFaviconGenerator to create favicons? `boolean`
     icons: {
-        // Create Android homescreen icon. `boolean`
-        android: false,
-        // Create Apple touch icons. `boolean`
-        appleIcon: true,
-        // Create Apple startup images. `boolean`
-        appleStartup: false,
-        // Create Opera Coast icon. `boolean`
-        coast: false,
-        // Create regular favicons. `boolean`
-        favicons: true,
-        // Create Firefox OS icons. `boolean`
-        firefox: false,
-        // Create Facebook OpenGraph. `boolean`
-        opengraph: true,
-        // Create Windows 8 tiles. `boolean`
-        windows: false,
-        // Create Yandex browser icon. `boolean`
-        yandex: false
-    },
-    settings: {
-        // Your application's name. `string`
-        appName: null,
-        // Your application's description. `string`
-        appDescription: null,
-        // Your (or your developer's) name. `string`
-        developer: null,
-        // Your (or your developer's) URL. `string`
-        developerURL: null,
-        // Your application's version number. `number`
-        version: 1.0,
-        // Background colour for flattened icons. `string`
-        background: null,
-        // Path for the initial page on the site. `string`
-        index: null,
-        // URL for your website. `string`
-        url: null,
-        // Turn the logo into a white silhouette for Windows 8. `boolean`
-        silhouette: false,
-        // Print logs to console? `boolean`
-        logging: true
-    },
-    // Complete JSON overwrite for the favicon_generation object. `object`
-    favicon_generation: null,
-  }, function (err, metadata) {
-    if (err) console.log(err)
-    // console.log(metadata)
+      android: false,              // Create Android homescreen icon. `boolean`
+      appleIcon: true,            // Create Apple touch icons. `boolean`
+      appleStartup: false,         // Create Apple startup images. `boolean`
+      coast: false,                // Create Opera Coast icon. `boolean`
+      favicons: true,             // Create regular favicons. `boolean`
+      firefox: false,              // Create Firefox OS icons. `boolean`
+      opengraph: true,            // Create Facebook OpenGraph image. `boolean`
+      twitter: true,              // Create Twitter Summary Card image. `boolean`
+      windows: false,              // Create Windows 8 tile icons. `boolean`
+      yandex: false                // Create Yandex browser icon. `boolean`
+    }
+  }
+  var callback = function (error, response) {
+    if (error) {
+        console.log(error.status);  // HTTP error code (e.g. `200`) or `null`
+        console.log(error.name);    // Error name e.g. "API Error"
+        console.log(error.message); // Error description e.g. "An unknown error has occurred"
+    }
+    // console.log(response.images);   // Array of { name: string, contents: <buffer> }
+    // console.log(response.files);    // Array of { name: string, contents: <string> }
+    // console.log(response.html);     // Array of strings (html elements)
+    forEach(response.images, (file) => {
+      writeFile([dest, '/', file.name].join(''), file.contents)
+    })
     cb()
-  })
 }
 
 module.exports = makeICO

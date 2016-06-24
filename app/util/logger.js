@@ -1,4 +1,4 @@
-var clrz       = require('colorz')
+var clrz       = require('toolz/src/util/colorz')
 var dateFormat = require('toolz/src/date/clockin')
 var log        = require('toolz/src/debug/logr')
 var nano       = require('toolz/src/time/nano')

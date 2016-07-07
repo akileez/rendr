@@ -46,6 +46,9 @@ function makeICO (image, dest, cb) {
       writeFile([dest, '/', file.name].join(''), file.contents)
     })
     cb()
+  }
+
+  favicons(source, config, callback)
 }
 
 module.exports = makeICO
